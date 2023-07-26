@@ -9,8 +9,9 @@ import (
 	"strings"
 )
 
-const NUM_COL = 6
-const NUM_BALL = 4
+const NUM_COL = 10
+const NUM_BALL = 5
+const ALLOW_DUPLICATE = true
 
 func permutation(pat *[]string, index *int, s string) string {
 	if len(s) >= NUM_BALL {
@@ -59,6 +60,16 @@ func listup(pat *[]string, cnt *[][]int, candidate *[]bool, sel string, hit, blo
 	}
 }
 
+func removeDuplicate(cnt *[][]int, candidate *[]bool) {
+	for i, c := range *cnt {
+		for j := 0; j < len(c); j++ {
+			if c[j] > 1 {
+				(*candidate)[i] = false
+			}
+		}
+	}
+}
+
 func main() {
 	pat := make([]string, int(math.Pow(NUM_COL, NUM_BALL)))
 	cnt := make([][]int, int(math.Pow(NUM_COL, NUM_BALL)))
@@ -74,6 +85,9 @@ func main() {
 	candidate := make([]bool, len(pat))
 	for i := 0; i < len(candidate); i++ {
 		candidate[i] = true
+	}
+	if !ALLOW_DUPLICATE {
+		removeDuplicate(&cnt, &candidate)
 	}
 	for {
 		fmt.Println("number hit blow")
